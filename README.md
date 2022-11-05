@@ -8,7 +8,9 @@ Aplicação focada em gerenciar apostas para a copa do mundo de 2022.
 
 ### Funcionalidades
 
+- Criar bolões.
 - Listar todos os bolões craidos.
+- Fazer apostas nos bolões existentes.
 
 ## 🚀 Tecnologias
 
