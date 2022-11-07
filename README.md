@@ -32,6 +32,7 @@ Aplicação focada em gerenciar apostas para a copa do mundo de 2022.
 
 - [ReactNative](https://nodejs.org/en/)
 - [Expo](https://nodejs.org/en/)
+- [NativeBase](https://nativebase.io/)
 
 ## 💻 Clonando projeto
 
