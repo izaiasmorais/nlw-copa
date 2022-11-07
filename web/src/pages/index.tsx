@@ -6,6 +6,7 @@ import iconCheckImg from "../assets/icon.png";
 import { api } from "../lib/axios";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
+import Head from "next/head";
 
 interface HomeProps {
   poolsCount: number;
@@ -43,6 +44,9 @@ export default function Home({
       className="max-w-[1124px] mx-auto grid grid-cols-2 items-center
     h-screen gap-28"
     >
+      <Head>
+        <title>NLW Copa</title>
+      </Head>
       <main>
         <Image src={logoImg} alt="NLW Copa" />
         <h1 className="mt-14 text-white text-5xl font-bold leading-tight">
