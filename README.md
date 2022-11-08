@@ -2,6 +2,10 @@
    ⚽️ NLW Copa
 </h1>
 
+<div align='center'>
+   <img src='https://i.imgur.com/7UPq7ad.png' />
+</div>
+
 ## 📃 Sobre o projeto
 
 Aplicação focada em gerenciar apostas para a copa do mundo de 2022.
