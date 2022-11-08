@@ -9,29 +9,29 @@ import toast from "react-hot-toast";
 import Head from "next/head";
 
 interface HomeProps {
-  poolsCount: number;
+  pollsCount: number;
   usersCount: number;
   guessesCount: number;
 }
 
 export default function Home({
-  poolsCount,
+  pollsCount,
   usersCount,
   guessesCount,
 }: HomeProps) {
-  const [poolTitle, setPoolTitle] = useState("");
+  const [pollTitle, setPollTitle] = useState("");
 
-  async function createPool(event: FormEvent<HTMLFormElement>) {
+  async function createPoll(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     try {
-      const response = await api.post("/pools", {
-        title: poolTitle,
+      const response = await api.post("/polls", {
+        title: pollTitle,
       });
 
       const { code } = response.data;
       await navigator.clipboard.writeText(code);
-      setPoolTitle("");
+      setPollTitle("");
       toast.success("Bolão criado com sucesso!");
     } catch (error) {
       toast.error("Ocorreu um erro ao criar bolão!");
@@ -60,15 +60,15 @@ export default function Home({
           </strong>
         </div>
 
-        <form className="mt-10 flex gap-2" onSubmit={createPool}>
+        <form className="mt-10 flex gap-2" onSubmit={createPoll}>
           <input
             required
             className="flex-1 py-4 px-6 rounded bg-gray-800 border-gray-600
             text-sm text-gray-100"
             placeholder="Como vai se chamar o seu bolão?"
             type="text"
-            onChange={(e) => setPoolTitle(e.target.value)}
-            value={poolTitle}
+            onChange={(e) => setPollTitle(e.target.value)}
+            value={pollTitle}
           />
           <button
             className="bg-yellow-500 text-gray-900 text-sm py-4 px-6 rounded
@@ -91,7 +91,7 @@ export default function Home({
           <div className="flex items-center gap-6">
             <Image src={iconCheckImg} alt="" />
             <div className="flex flex-col">
-              <span className="font-bold text-2xl">+{poolsCount}</span>
+              <span className="font-bold text-2xl">+{pollsCount}</span>
               <span>Bolões criados</span>
             </div>
           </div>
@@ -118,15 +118,15 @@ export default function Home({
 }
 
 export const getServerSideProps = async () => {
-  const [poolsCount, usersCount, guessesCount] = await Promise.all([
-    api.get("pools/count"),
+  const [pollsCount, usersCount, guessesCount] = await Promise.all([
+    api.get("polls/count"),
     api.get("users/count"),
     api.get("guesses/count"),
   ]);
 
   return {
     props: {
-      poolsCount: poolsCount.data.count,
+      pollsCount: pollsCount.data.count,
       usersCount: usersCount.data.count,
       guessesCount: guessesCount.data.count,
     },
