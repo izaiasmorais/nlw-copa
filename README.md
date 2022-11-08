@@ -6,6 +6,10 @@
    <img src='https://i.imgur.com/7UPq7ad.png' />
 </div>
 
+<div>
+<img src="https://img.shields.io/static/v1?label=LICENSE&message=MIT&color=129E57&style=for-the-badge"/> <img src="https://img.shields.io/static/v1?label=STATUS&message=FINISHED&color=129E57&style=for-the-badge"/> <img src="https://img.shields.io/static/v1?label=NPM&message=V1.0.0&color=129E57&style=for-the-badge"/>
+</div>
+
 ## 📃 Sobre o projeto
 
 Aplicação focada em gerenciar apostas para a copa do mundo de 2022.
@@ -14,7 +18,7 @@ Aplicação focada em gerenciar apostas para a copa do mundo de 2022.
 
 - Criar bolões.
 - Listar todos os bolões craidos.
-- Fazer apostas nos bolões existentes.
+- Realizar palpites nos bolões existentes.
 
 ## 🚀 Tecnologias
 
