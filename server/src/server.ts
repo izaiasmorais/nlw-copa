@@ -5,6 +5,7 @@ import { authRoutes } from "./routes/auth";
 import { userRoutes } from "./routes/user";
 import { gameRoutes } from "./routes/game";
 import { guessRoutes } from "./routes/guess";
+import jwt from "@fastify/jwt";
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -14,6 +15,12 @@ async function bootstrap() {
   await fastify.register(cors, {
     origin: true,
   });
+
+  await fastify.register(jwt, {
+    secret: "nlwcopa",
+  });
+
+  // secret might be a env on production
 
   fastify.register(pollRoutes);
   fastify.register(authRoutes);
