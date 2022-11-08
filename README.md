@@ -27,7 +27,6 @@ Aplicação focada em gerenciar apostas para a copa do mundo de 2022.
 - [Next.js](https://nextjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [TailwindCSS](https://tailwindcss.com/)
-- [Radix UI](https://www.radix-ui.com/)
 
 ### Backend
 
