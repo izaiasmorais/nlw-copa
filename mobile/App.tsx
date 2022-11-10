@@ -7,15 +7,15 @@ import {
 import { NativeBaseProvider, StatusBar } from "native-base";
 import { Loading } from "./src/components/Loading";
 import { AuthCOntextProvider } from "./src/contexts/AuthContext";
-import { SignIn } from "./src/screens/SignIn";
+import { Routes } from "./src/routes";
 import { THEME } from "./src/styles/theme";
 
 export default function App() {
-  const [fontsLoaded] = useFonts([
+  const [fontsLoaded] = useFonts({
     Roboto_400Regular,
     Roboto_500Medium,
     Roboto_700Bold,
-  ]);
+  });
 
   return (
     <NativeBaseProvider theme={THEME}>
@@ -25,7 +25,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        {fontsLoaded ? <SignIn /> : <Loading />}
+        {fontsLoaded ? <Routes /> : <Loading />}
       </AuthCOntextProvider>
     </NativeBaseProvider>
   );
