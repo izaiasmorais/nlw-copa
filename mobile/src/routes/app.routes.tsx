@@ -21,7 +21,7 @@ export function AppRoutes() {
         tabBarInactiveTintColor: colors.gray[300],
         tabBarStyle: {
           position: "absolute",
-          height: 87,
+          height: sizes[22],
           borderTopWidth: 0,
           backgroundColor: colors.gray[800],
         },
@@ -49,6 +49,12 @@ export function AppRoutes() {
       />
       <Screen
         name="find"
+        component={Find}
+        options={{ tabBarButton: () => null }}
+      />
+
+      <Screen
+        name="details"
         component={Find}
         options={{ tabBarButton: () => null }}
       />

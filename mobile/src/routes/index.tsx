@@ -8,7 +8,7 @@ export function Routes() {
   const { user } = useAuth();
 
   return (
-    <Box bg="gray.900" flex={1}>
+    <Box flex={1} bgColor="gray.900">
       <NavigationContainer>
         {user.name ? <AppRoutes /> : <SignIn />}
       </NavigationContainer>
