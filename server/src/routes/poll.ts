@@ -153,7 +153,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 
     const { id } = getPollParams.parse(request.params);
 
-    const poll = await prisma.poll.findMany({
+    const poll = await prisma.poll.findUnique({
       where: {
         id,
       },
@@ -187,4 +187,34 @@ export async function pollRoutes(fastify: FastifyInstance) {
 
     return { poll };
   });
+
+  fastify.delete(
+    "/polls/:id/delete",
+    { onRequest: [authenticate] },
+    async (request, reply) => {
+      const getPollsParams = z.object({
+        id: z.string(),
+      });
+
+      const { id } = getPollsParams.parse(request.params);
+
+      const poll = await prisma.poll.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!poll) {
+        return reply.status(400).send({
+          message: "Poll not found",
+        });
+      }
+
+      await prisma.poll.delete({
+        where: {
+          id: poll.id,
+        },
+      });
+    }
+  );
 }
