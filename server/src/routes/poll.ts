@@ -153,7 +153,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
 
     const { id } = getPollParams.parse(request.params);
 
-    const poll = await prisma.poll.findUnique({
+    const poll = await prisma.poll.findFirst({
       where: {
         id,
       },
