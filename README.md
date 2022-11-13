@@ -52,9 +52,14 @@ $ git clone https://github.com/izaiasmorais/nlw-copa.git && cd nlw-copa
 $ npm i
 
 # Variáveis ambiente
-//
+// Na aplicação web você deve definir a AXIOS_BASE_URL=http://localhost:3333/ ou a url base da sua API.
+// Na aplicação mobile você deve definir o CLIENT_ID, que é o IDs do cliente OAuth 2.0, do Google Cloud.
+// Para conseguir esse ID, siga os passos mostrados [aqui](https://ezblog.vercel.app/)
 
 # Rodando o projeto
+// server
 $ npm run dev
 
+// web e mobile
+$ npm run start
 ```
