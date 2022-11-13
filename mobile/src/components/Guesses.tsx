@@ -85,7 +85,7 @@ export function Guesses({ pollId }: Props) {
           data={item}
           setFirstTeamPoints={setFirstTeamPoints}
           setSecondTeamPoints={setSecondTeamPoints}
-          onGuessConfirm={() => handleGuessConfirm(item.id)}
+          onGuessConfirm={() => {}}
         />
       )}
       _contentContainerStyle={{ pb: 10 }}
