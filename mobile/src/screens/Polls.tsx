@@ -5,13 +5,13 @@ import { Octicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { api } from "../services/api";
 import { useCallback, useEffect, useState } from "react";
-import { PollCard, PollPros } from "../components/PollCard";
+import { PollCard, PollProps } from "../components/PollCard";
 import { EmptyPollList } from "../components/EmptyPollList";
 import { Loading } from "../components/Loading";
 
 export function Polls() {
   const [isLoading, setIsLoading] = useState(false);
-  const [polls, setPolls] = useState<PollPros[]>([]);
+  const [polls, setPolls] = useState<PollProps[]>([]);
   const { navigate } = useNavigation();
   const toast = useToast();
 

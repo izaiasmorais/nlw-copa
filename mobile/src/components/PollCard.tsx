@@ -1,9 +1,9 @@
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
-import { Heading, HStack, Text, VStack } from 'native-base';
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { Heading, HStack, Text, VStack } from "native-base";
 
-import { Participants, ParticipantProps } from './Participants';
+import { Participants, ParticipantProps } from "./Participants";
 
-export interface PollPros {
+export interface PollProps {
   id: string;
   code: string;
   title: string;
@@ -11,15 +11,15 @@ export interface PollPros {
   createdAt: string;
   owner: {
     name: string;
-  },
+  };
   participants: ParticipantProps[];
   _count: {
     participants: number;
-  }
+  };
 }
 
 interface Props extends TouchableOpacityProps {
-  data: PollPros;
+  data: PollProps;
 }
 
 export function PollCard({ data, ...rest }: Props) {
@@ -39,7 +39,7 @@ export function PollCard({ data, ...rest }: Props) {
       >
         <VStack>
           <Heading color="white" fontSize="md" fontFamily="heading">
-            {data.title}
+            {data.title.toUpperCase()}
           </Heading>
 
           <Text color="gray.200" fontSize="xs">
