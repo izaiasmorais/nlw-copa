@@ -83,7 +83,7 @@ export function Details() {
               isSelected={optionSelected === "ranking"}
               onPress={() => setOptionSelected("ranking")}
             />
-            <Guesses pollId={pollDetails.id} />
+            <Guesses pollId={pollDetails.id} code={ pollDetails.code} />
           </HStack>
         </VStack>
       ) : (
