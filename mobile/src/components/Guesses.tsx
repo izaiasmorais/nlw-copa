@@ -23,6 +23,7 @@ export function Guesses({ pollId, code }: Props) {
       setIsLoading(true);
 
       const response = await api.get(`/polls/${pollId}/games`);
+
       setGames(response.data.games);
     } catch (error) {
       console.log(error);
