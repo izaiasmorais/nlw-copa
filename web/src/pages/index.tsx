@@ -3,10 +3,12 @@ import appPreviewImg from "../assets/aplicacao-trilha-ignite.png";
 import logoImg from "../assets/logo.svg";
 import usersAvatarImg from "../assets/avatares.png";
 import iconCheckImg from "../assets/icon.png";
+import { FcGoogle } from "react-icons/fc";
 import { api } from "../lib/axios";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import Head from "next/head";
+import Link from "next/link";
 
 interface HomeProps {
   pollsCount: number;
@@ -50,7 +52,7 @@ export default function Home({
       <main>
         <Image src={logoImg} alt="NLW Copa" />
         <h1 className="mt-14 text-white text-5xl font-bold leading-tight">
-          Crie seu próprio bolão da copa e compartilhe entre amigos!
+          Participe de bolões da copa, ganhe pontos e diversas recompensas!
         </h1>
         <div className="mt-10 flex items-center gap-2">
           <Image src={usersAvatarImg} alt="Avatares" quality={100} />
@@ -61,22 +63,15 @@ export default function Home({
         </div>
 
         <form className="mt-10 flex gap-2" onSubmit={createPoll}>
-          <input
-            required
-            className="flex-1 py-4 px-6 rounded bg-gray-800 border-gray-600
-            text-sm text-gray-100"
-            placeholder="Como vai se chamar o seu bolão?"
-            type="text"
-            onChange={(e) => setPollTitle(e.target.value)}
-            value={pollTitle}
-          />
-          <button
-            className="bg-yellow-500 text-gray-900 text-sm py-4 px-6 rounded
-            font-bold hover:bg-yellow-700 transition-colors"
+          <Link
+            className="bg-gray-100 text-gray-900 text-sm py-4 px-6 rounded
+            font-bold hover:bg-gray-400 transition-colors flex items-center
+            gap-2 w-full justify-center"
             type="submit"
+            href="polls"
           >
-            CRIAR MEU BOLÃO
-          </button>
+            <FcGoogle size={24} /> ENTRAR COM GOOGLE
+          </Link>
         </form>
 
         <p className="text-gray-300 mt-4 text-sm leading-relaxed">
