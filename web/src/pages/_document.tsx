@@ -13,7 +13,7 @@ export default function Document() {
 
         <link rel="shortcut icon" href="/icon.png" type="image/x-icon" />
       </Head>
-      <body className="bg-[#121214] bg-app bg-no-repeat bg-cover">
+      <body className="bg-[#121214]">
         <Main />
         <NextScript />
       </body>

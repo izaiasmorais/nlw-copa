@@ -42,72 +42,74 @@ export default function Home({
   }
 
   return (
-    <div
-      className="max-w-[1124px] mx-auto grid grid-cols-2 items-center
+    <div className="bg-app bg-no-repeat bg-cover">
+      <div
+        className="max-w-[1124px] mx-auto grid grid-cols-2 items-center
     h-screen gap-28"
-    >
-      <Head>
-        <title>NLW Copa</title>
-      </Head>
-      <main>
-        <Image src={logoImg} alt="NLW Copa" />
-        <h1 className="mt-14 text-white text-5xl font-bold leading-tight">
-          Participe de bolões da copa, ganhe pontos e diversas recompensas!
-        </h1>
-        <div className="mt-10 flex items-center gap-2">
-          <Image src={usersAvatarImg} alt="Avatares" quality={100} />
-          <strong className="text-gray-100 text-xl">
-            <span className="text-ignite-500">+{usersCount}</span> pessoas já
-            estão utilizando.
-          </strong>
-        </div>
+      >
+        <Head>
+          <title>NLW Copa</title>
+        </Head>
+        <main>
+          <Image src={logoImg} alt="NLW Copa" />
+          <h1 className="mt-14 text-white text-5xl font-bold leading-tight">
+            Participe de bolões da copa, ganhe pontos e diversas recompensas!
+          </h1>
+          <div className="mt-10 flex items-center gap-2">
+            <Image src={usersAvatarImg} alt="Avatares" quality={100} />
+            <strong className="text-gray-100 text-xl">
+              <span className="text-ignite-500">+{usersCount}</span> pessoas já
+              estão utilizando.
+            </strong>
+          </div>
 
-        <form className="mt-10 flex gap-2" onSubmit={createPoll}>
-          <Link
-            className="bg-gray-100 text-gray-900 text-sm py-4 px-6 rounded
-            font-bold hover:bg-gray-400 transition-colors flex items-center
+          <form className="mt-10 flex gap-2" onSubmit={createPoll}>
+            <Link
+              className="bg-yellow-500 text-gray-900 text-sm py-4 px-6 rounded
+            font-bold hover:bg-yellow-700 transition-colors flex items-center
             gap-2 w-full justify-center"
-            type="submit"
-            href="polls"
-          >
-            <FcGoogle size={24} /> ENTRAR COM GOOGLE
-          </Link>
-        </form>
+              type="submit"
+              href="polls"
+            >
+              <FcGoogle size={24} /> ENTRAR COM GOOGLE
+            </Link>
+          </form>
 
-        <p className="text-gray-300 mt-4 text-sm leading-relaxed">
-          Após criar seu bolão, você receberá um código único que poderá usar
-          para convidar outras pessoas 🚀
-        </p>
+          <p className="text-gray-300 mt-4 text-sm leading-relaxed">
+            Após criar seu bolão, você receberá um código único que poderá usar
+            para convidar outras pessoas 🚀
+          </p>
 
-        <div
-          className="mt-10 pt-10 border-t border-gray-600
+          <div
+            className="mt-10 pt-10 border-t border-gray-600
         text-gray-100 flex justify-between items-center"
-        >
-          <div className="flex items-center gap-6">
-            <Image src={iconCheckImg} alt="" />
-            <div className="flex flex-col">
-              <span className="font-bold text-2xl">+{pollsCount}</span>
-              <span>Bolões criados</span>
+          >
+            <div className="flex items-center gap-6">
+              <Image src={iconCheckImg} alt="" />
+              <div className="flex flex-col">
+                <span className="font-bold text-2xl">+{pollsCount}</span>
+                <span>Bolões criados</span>
+              </div>
+            </div>
+
+            <div className="w-px h-16 bg-gray-600" />
+
+            <div className="flex items-center gap-6">
+              <Image src={iconCheckImg} alt="" />
+              <div className="flex flex-col">
+                <span className="font-bold text-2xl">+{guessesCount}</span>
+                <span>Palpites criados</span>
+              </div>
             </div>
           </div>
+        </main>
 
-          <div className="w-px h-16 bg-gray-600" />
-
-          <div className="flex items-center gap-6">
-            <Image src={iconCheckImg} alt="" />
-            <div className="flex flex-col">
-              <span className="font-bold text-2xl">+{guessesCount}</span>
-              <span>Palpites criados</span>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <Image
-        src={appPreviewImg}
-        alt="Dois celulares exibindo a aplicação mobile do NLW Copa"
-        quality={100}
-      />
+        <Image
+          src={appPreviewImg}
+          alt="Dois celulares exibindo a aplicação mobile do NLW Copa"
+          quality={100}
+        />
+      </div>
     </div>
   );
 }
