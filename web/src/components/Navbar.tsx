@@ -1,28 +1,18 @@
-import Link from "next/link";
 import { SoccerBall, Trophy } from "phosphor-react";
+import { Navlink } from "./Navlink";
 
 export function Navbar() {
   return (
     <nav className="mt-16 w-full font-xl flex gap-8">
-      <Link href="/polls">
-        <p
-          className="pb-4 text-yellow-500 border-b-2 border-yellow-500
-        text-md  flex gap-2 hover:text-yellow-500"
-        >
-          <SoccerBall size={24} />
-          Bolões
-        </p>
-      </Link>
+      <Navlink src="/polls">
+        <SoccerBall size={24} />
+        Bolões
+      </Navlink>
 
-      <Link href="/ranking">
-        <p
-          className="pb-4 text-gray-200 border-b-2 border-transparent text-md
-         flex gap-2 hover:text-yellow-500"
-        >
-          <Trophy size={24} />
-          Ranking geral
-        </p>
-      </Link>
+      <Navlink src="/ranking">
+        <Trophy size={24} />
+        Ranking geral
+      </Navlink>
     </nav>
   );
 }

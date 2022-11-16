@@ -16,7 +16,7 @@ export function Layout({ title, children }: LayoutProps) {
         <meta name="bolões" content="noindex" />
       </Head>
 
-      <div className="w-full mx-auto my-x max-w-[1120px] text-white">
+      <div className="w-full px-4 mx-auto my-x max-w-[1240px] text-white">
         <Header />
         <Navbar />
         {children}

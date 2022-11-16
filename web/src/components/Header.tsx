@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
 import logoImg from "../assets/logo.svg";
@@ -8,7 +9,9 @@ export function Header() {
 
   return (
     <div className="h-12 flex items-center justify-between mt-12">
-      <Image src={logoImg} alt="Logo NLW" height={35} />
+      <Link href="/">
+        <Image src={logoImg} alt="Logo NLW" height={35} />
+      </Link>
       <div className="flex gap-2">
         <input
           type="text"

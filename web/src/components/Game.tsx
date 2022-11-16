@@ -1,20 +1,50 @@
 import Image from "next/image";
-import Link from "next/link";
-import AvatarsImg from "../assets/people.png";
+import brImg from "../assets/br.png";
+import beImg from "../assets/be.png";
 
 export function Game() {
   return (
-    <Link href="/polls/jogos-do-brasil">
-      <div
-        className="flex flex-col p-4 bg-gray-800 rounded border-b-2
-    border-yellow-500 hover:bg-gray-600 transition-colors"
-      >
-        <h1 className="font-bold text-lg">JOGOS DO BRASIL</h1>
-        <p className="font-normal text-sm mt-1 text-gray-200">
-          Criado por Izaías
+    <div
+      className="p-4 bg-gray-800 grid justify-center border-b-2
+    border-yellow-500 text-center items-center gap-4 rounded"
+    >
+      <div className="mb-1 gap-1 grid">
+        <strong className="font-bold">Brasil vs Alemanha</strong>
+        <p className="text-sm text-gray-200">
+          22 de Novembro de 2022 às 19:00h
         </p>
-        <Image src={AvatarsImg} alt="avatares" className="mt-6" />
       </div>
-    </Link>
+
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2 items-center">
+          <input
+            type="number"
+            max="20"
+            className="bg-gray-900 w-16 h-10 rounded border
+            border-gray-600 text-gray-200 p-2"
+          />
+          <Image src={brImg} alt="brazil-flag" className="w-9 h-6" />
+        </div>
+
+        <p className="text-gray-200 mx-4">X</p>
+
+        <div className="flex gap-2 items-center">
+          <input
+            type="number"
+            max="20"
+            className="bg-gray-900 w-16 h-10 rounded border
+            border-gray-600 text-gray-200 p-2"
+          />
+          <Image src={beImg} alt="belgic-flag" className="w-9 h-6" />
+        </div>
+      </div>
+
+      <button
+        className="bg-ignite-500 w-full rounded text-sm font-semibold py-2
+      hover:bg-ignite-600"
+      >
+        CONFIRMAR PALPITE
+      </button>
+    </div>
   );
 }
