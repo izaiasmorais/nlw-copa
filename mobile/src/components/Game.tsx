@@ -4,102 +4,114 @@ import { getName } from "country-list";
 import { Team } from "./Team";
 import ptBR from "dayjs/locale/pt-br";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 interface GuessProps {
-  id: string;
-  gameId: string;
-  createdAt: string;
-  participantId: string;
-  firstTeamPoints: number;
-  secondTeamPoints: number;
+	id: string;
+	gameId: string;
+	createdAt: string;
+	participantId: string;
+	firstTeamPoints: number;
+	secondTeamPoints: number;
 }
 
 export interface GameProps {
-  id: string;
-  date: string;
-  firstTeamCountryCode: string;
-  secondTeamCountryCode: string;
-  guess: null | GuessProps;
+	id: string;
+	date: string;
+	firstTeamCountryCode: string;
+	secondTeamCountryCode: string;
+	guess: GuessProps | null;
+	isOver: boolean;
 }
 
 interface Props {
-  data: GameProps;
-  onGuessConfirm: () => void;
-  setFirstTeamPoints: (value: string) => void;
-  setSecondTeamPoints: (value: string) => void;
+	data: GameProps;
+	onGuessConfirm: () => void;
+	setFirstTeamPoints: (value: string) => void;
+	setSecondTeamPoints: (value: string) => void;
 }
 
 export function Game({
-  data,
-  setFirstTeamPoints,
-  setSecondTeamPoints,
-  onGuessConfirm,
+	data,
+	setFirstTeamPoints,
+	setSecondTeamPoints,
+	onGuessConfirm,
 }: Props) {
-  const { colors, sizes } = useTheme();
-  const when = dayjs(data.date)
-    .locale(ptBR)
-    .format("DD [de] MMMM [de] YYYY [ás] HH:00[h]");
+	const [isLoading, setIsLoading] = useState(false);
+	const { colors, sizes } = useTheme();
+	const when = dayjs(data.date)
+		.locale(ptBR)
+		.format("DD [de] MMMM [de] YYYY [ás] HH:00[h]");
 
-  return (
-    <VStack
-      w="full"
-      bgColor="gray.800"
-      rounded="sm"
-      alignItems="center"
-      borderBottomWidth={3}
-      borderBottomColor="yellow.500"
-      mb={3}
-      p={4}
-    >
-      <Text color="gray.100" fontFamily="heading" fontSize="sm">
-        {getName(data.firstTeamCountryCode)} vs.{" "}
-        {getName(data.secondTeamCountryCode)}
-      </Text>
+	const handleButtonClick = async () => {
+		setIsLoading(true);
+		await onGuessConfirm();
+		setIsLoading(false);
+	};
 
-      <Text color="gray.200" fontSize="xs">
-        {when}
-      </Text>
+	return (
+		<VStack
+			w="full"
+			bgColor="gray.800"
+			rounded="sm"
+			alignItems="center"
+			borderBottomWidth={3}
+			borderBottomColor="yellow.500"
+			mb={3}
+			p={4}
+		>
+			<Text color="gray.100" fontFamily="heading" fontSize="sm">
+				{getName(data.firstTeamCountryCode)} vs.{" "}
+				{getName(data.secondTeamCountryCode)}
+			</Text>
 
-      <HStack
-        mt={4}
-        w="full"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Team
-          code={data.firstTeamCountryCode}
-          position="right"
-          onChangeText={setFirstTeamPoints}
-        />
+			<Text color="gray.200" fontSize="xs">
+				{when}
+			</Text>
 
-        <X color={colors.gray[300]} size={sizes[6]} />
+			<HStack
+				mt={4}
+				w="full"
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				<Team
+					code={data.firstTeamCountryCode}
+					points={data.guess?.firstTeamPoints}
+					onChangeText={setFirstTeamPoints}
+					position="right"
+				/>
 
-        <Team
-          code={data.secondTeamCountryCode}
-          position="left"
-          onChangeText={setSecondTeamPoints}
-        />
-      </HStack>
+				<X color={colors.gray[300]} size={sizes[6]} />
 
-      {!data.guess && (
-        <Button
-          size="md"
-          w="full"
-          mt={4}
-          bgColor="green.500"
-          _hover={{ backgroundColor: "black" }}
-          _pressed={{ bg: "green.600" }}
-          onPress={onGuessConfirm}
-        >
-          <HStack alignItems="center">
-            <Text color="white" fontSize="xs" fontFamily="heading" mr={3}>
-              CONFIRMAR PALPITE
-            </Text>
+				<Team
+					position="left"
+					code={data.secondTeamCountryCode}
+					points={data.guess?.firstTeamPoints}
+					onChangeText={setSecondTeamPoints}
+				/>
+			</HStack>
 
-            <Check color={colors.white} size={sizes[4]} />
-          </HStack>
-        </Button>
-      )}
-    </VStack>
-  );
+			{!data.guess && (
+				<Button
+					size="md"
+					w="full"
+					mt={4}
+					bgColor="green.500"
+					_pressed={{ bg: "green.600" }}
+					onPress={handleButtonClick}
+					isLoading={isLoading}
+					isDisabled={data.isOver}
+				>
+					<HStack alignItems="center">
+						<Text color="white" fontSize="xs" fontFamily="heading" mr={3}>
+							{data.isOver ? "TEMPO ESGOTADO" : "CONFIRMAR PALPITE"}
+						</Text>
+
+						{!data.isOver && <Check color={colors.white} size={sizes[4]} />}
+					</HStack>
+				</Button>
+			)}
+		</VStack>
+	);
 }

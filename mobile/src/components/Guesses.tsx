@@ -1,98 +1,82 @@
-import { FlatList, useToast } from "native-base";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { FlatList } from "native-base";
+import { useCallback, useEffect, useState } from "react";
+import { useNotification } from "../hooks/useNotify";
 import { api } from "../services/api";
 import { EmptyMyPollList } from "./EmptyMyPollList";
 import { Game, GameProps } from "./Game";
 import { Loading } from "./Loading";
 
 interface Props {
-  pollId: string;
-  code: string;
+	pollId: string;
+	code: string;
 }
 
 export function Guesses({ pollId, code }: Props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [games, setGames] = useState<GameProps[]>([]);
-  const [firstTeamPoints, setFirstTeamPoints] = useState("");
-  const [secondTeamPoints, setSecondTeamPoints] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [games, setGames] = useState<GameProps[]>([]);
+	const [firstTeamPoints, setFirstTeamPoints] = useState("");
+	const [secondTeamPoints, setSecondTeamPoints] = useState("");
+	const { showSuccess, showError } = useNotification();
 
-  const toast = useToast();
+	async function getGames(id: string) {
+		try {
+			setIsLoading(true);
 
-  async function getGames() {
-    try {
-      setIsLoading(true);
+			const response = await api.get(`/polls/${id}/games`);
 
-      const response = await api.get(`/polls/${pollId}/games`);
+			setGames(response.data.games);
+		} catch (error) {
+			console.log(error);
 
-      setGames(response.data.games);
-    } catch (error) {
-      console.log(error);
+			showError("Não foi possível carregar os jogos");
+		} finally {
+			setIsLoading(false);
+		}
+	}
 
-      toast.show({
-        title: "Não foi possível carregar os jogos",
-        placement: "top",
-        bgColor: "red.500",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }
+	async function handleGuessConfirm(gameId: string) {
+		try {
+			if (!firstTeamPoints.trim() || !secondTeamPoints.trim()) {
+				return showError("Informe um placar válido!");
+			}
 
-  async function handleGuessConfirm(gameId: string) {
-    try {
-      if (!firstTeamPoints.trim() || !secondTeamPoints.trim()) {
-        return toast.show({
-          title: "Informe um placar válido!",
-          placement: "top",
-          bgColor: "red.500",
-        });
-      }
+			await api.post(`/polls/${pollId}/games/${gameId}/guesses`, {
+				firstTeamPoints: Number(firstTeamPoints),
+				secondTeamPoints: Number(secondTeamPoints),
+			});
 
-      await api.post(`/polls/${pollId}/games/${gameId}/guesses`, {
-        firstTeamPoints: Number(firstTeamPoints),
-        secondTeamPoints: Number(secondTeamPoints),
-      });
+			showSuccess("Palpite realizado com sucesso");
 
-      toast.show({
-        title: "Palpite realizado com sucesso",
-        placement: "top",
-        bgColor: "green.500",
-      });
+			getGames(pollId);
+		} catch (error) {
+			console.log(error);
+			showError("Não foi possível realizar o palpite");
+		}
+	}
 
-      getGames();
-    } catch (error) {
-      console.log(error);
+	useEffect(() => {
+		getGames(pollId);
+	}, [pollId]);
 
-      toast.show({
-        title: "Não foi possível realizar o palpite",
-        placement: "top",
-        bgColor: "red.500",
-      });
-    }
-  }
+	if (isLoading) {
+		return <Loading />;
+	}
 
-  useEffect(() => {
-    getGames();
-  }, [pollId]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  return (
-    <FlatList
-      data={games}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <Game
-          data={item}
-          setFirstTeamPoints={setFirstTeamPoints}
-          setSecondTeamPoints={setSecondTeamPoints}
-          onGuessConfirm={() => handleGuessConfirm(item.id)}
-        />
-      )}
-      _contentContainerStyle={{ pb: 10 }}
-      ListEmptyComponent={() => <EmptyMyPollList code={code} />}
-    />
-  );
+	return (
+		<FlatList
+			data={games}
+			keyExtractor={(item) => item.id}
+			renderItem={({ item }) => (
+				<Game
+					data={item}
+					setFirstTeamPoints={setFirstTeamPoints}
+					setSecondTeamPoints={setSecondTeamPoints}
+					onGuessConfirm={() => handleGuessConfirm(item.id)}
+				/>
+			)}
+			_contentContainerStyle={{ pb: 10 }}
+			ListEmptyComponent={() => <EmptyMyPollList code={code} />}
+		/>
+	);
 }
