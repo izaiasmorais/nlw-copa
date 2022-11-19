@@ -11,6 +11,8 @@ interface Props {
 }
 
 export function Team({ code, points, position, onChangeText }: Props) {
+	console.log(points);
+
 	return (
 		<HStack alignItems="center">
 			{position === "left" && (
@@ -23,10 +25,12 @@ export function Team({ code, points, position, onChangeText }: Props) {
 				textAlign="center"
 				fontSize="xs"
 				keyboardType="numeric"
-				defaultValue={points ? String(points) : undefined}
+				defaultValue={points ? String(points) : points === 0 ? "0" : undefined}
 				onChangeText={onChangeText}
+				isDisabled={points >= 0 ? true : false}
 				_disabled={{
 					opacity: 100,
+					borderColor: "green.500",
 				}}
 			/>
 
