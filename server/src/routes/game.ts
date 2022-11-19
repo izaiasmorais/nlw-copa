@@ -1,93 +1,154 @@
-import { FastifyInstance } from "fastify";
-import { z } from "zod";
 import { prisma } from "../lib/prisma";
+import { FastifyInstance } from "fastify";
 import { authenticate } from "../plugins/authenticate";
+import { z } from "zod";
+import { UserSubmission } from "../@types/user";
+import { EvaluateUserRankingUseCase } from "../usecases/userRanking";
 
 export async function gameRoutes(fastify: FastifyInstance) {
-  fastify.get(
-    "/polls/:id/games",
-    { onRequest: [authenticate] },
-    async (req) => {
-      const getPollParams = z.object({
-        id: z.string(),
-      });
+	fastify.get(
+		"/polls/:id/games",
+		{ onRequest: [authenticate] },
+		async (request) => {
+			const getPoolParams = z.object({
+				id: z.string(),
+			});
 
-      const { id } = getPollParams.parse(req.params);
+			const { id: pollId } = getPoolParams.parse(request.params);
 
-      const games = await prisma.game.findMany({
-        orderBy: {
-          date: "asc",
-        },
-        include: {
-          guesses: {
-            where: {
-              participant: {
-                userId: req.user.sub,
-                pollId: id,
-              },
-            },
-          },
-        },
-      });
+			const games = await prisma.game.findMany({
+				orderBy: {
+					date: "desc",
+				},
+				include: {
+					guesses: {
+						where: {
+							participant: {
+								userId: request.user.sub,
+								pollId,
+							},
+						},
+					},
+				},
+			});
 
-      return {
-        games: games.map((game) => {
-          return {
-            ...game,
-            guess: game.guesses.length > 0 ? game.guesses[0] : null,
-            guesses: undefined,
-          };
-        }),
-      };
-    }
-  );
+			const currentDate = new Date();
 
-  fastify.post(
-    "/polls/:id/games",
-    { onRequest: [authenticate] },
-    async (request, reply) => {
-      const getPollParams = z.object({
-        id: z.string(),
-      });
+			return {
+				games: games.map((game) => {
+					return {
+						...game,
+						guess: game.guesses.length > 0 ? game.guesses[0] : null,
+						guesses: undefined,
+						isOver: game.date < currentDate,
+					};
+				}),
+			};
+		}
+	);
 
-      const { id } = getPollParams.parse(request.params);
+	fastify.get(
+		"/polls/:id/ranking",
+		{ onRequest: [authenticate] },
+		async (request) => {
+			const getPollParams = z.object({
+				id: z.string(),
+			});
 
-      const poll = await prisma.poll.findUnique({
-        where: {
-          id,
-        },
-      });
+			const { id: pollId } = getPollParams.parse(request.params);
 
-      if (!poll) {
-        return reply.status(404).send({
-          message: "Poll not found",
-        });
-      }
+			const participants = await prisma.participant.findMany({
+				select: {
+					user: {
+						select: {
+							id: true,
+							name: true,
+							avatarUrl: true,
+						},
+					},
+					guesses: {
+						select: {
+							id: true,
+							firstTeamPoints: true,
+							secondTeamPoints: true,
+							createdAt: true,
+							game: {
+								select: {
+									date: true,
+									result: {
+										select: {
+											firstTeamPoints: true,
+											secondTeamPoints: true,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				where: {
+					pollId,
+				},
+			});
 
-      if (poll.ownerId !== request.user.sub) {
-        return reply.status(400).send({
-          message: "You are not allowed to create a game inside this poll",
-        });
-      }
+			const preparedUserData: UserSubmission[] = participants.map(
+				(participantItem) => {
+					return {
+						id: participantItem.user.id,
+						name: participantItem.user.name,
+						avatarUrl: participantItem.user.avatarUrl,
+						attemps: participantItem.guesses.map((guessItem) => {
+							let gameResult = null;
 
-      const createGameBody = z.object({
-        date: z.string(),
-        firstTeamCountryCode: z.string(),
-        secondTeamCountryCode: z.string(),
-      });
+							if (guessItem.game.result) {
+								gameResult = {
+									firstTeamPoints: guessItem.game.result.firstTeamPoints,
+									secondTeamPoints: guessItem.game.result.secondTeamPoints,
+								};
+							}
 
-      const { date, firstTeamCountryCode, secondTeamCountryCode } =
-        createGameBody.parse(request.body);
+							return {
+								guessSubmission: {
+									firstTeamPoints: guessItem.firstTeamPoints,
+									secondTeamPoints: guessItem.secondTeamPoints,
+								},
+								gameResult,
+							};
+						}),
+					};
+				}
+			);
 
-      await prisma.game.create({
-        data: {
-          date: new Date(date),
-          firstTeamCountryCode,
-          secondTeamCountryCode,
-        },
-      });
+			const computedScoreUsers =
+				EvaluateUserRankingUseCase.execute(preparedUserData);
 
-      return reply.status(201).send();
-    }
-  );
+			computedScoreUsers.sort((a, b) => {
+				if (a.score > b.score) {
+					return -1;
+				}
+
+				if (a.score < b.score) {
+					return 1;
+				}
+
+				if (a.attemps.length > b.attemps.length) {
+					return -1;
+				}
+
+				if (a.attemps.length < b.attemps.length) {
+					return 1;
+				}
+
+				return a.name < b.name ? 1 : -1;
+			});
+
+			return {
+				ranking: computedScoreUsers.map((computedItem, idx) => ({
+					position: idx + 1,
+					...computedItem,
+					attemps: undefined,
+				})),
+			};
+		}
+	);
 }
