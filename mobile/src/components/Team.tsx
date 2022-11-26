@@ -11,8 +11,6 @@ interface Props {
 }
 
 export function Team({ code, points, position, onChangeText }: Props) {
-	console.log(points);
-
 	return (
 		<HStack alignItems="center">
 			{position === "left" && (
